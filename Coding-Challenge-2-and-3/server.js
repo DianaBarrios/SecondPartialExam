@@ -1,8 +1,10 @@
 const express = require( 'express' );
 const bodyParser = require( 'body-parser' );
 const mongoose = require( 'mongoose' );
-const jsonParser = bodyParser.json();
+
 const { DATABASE_URL, PORT } = require( './config' );
+
+const jsonParser = bodyParser.json();
 
 const {Sports} = require('./models/sport-model')
 
@@ -11,7 +13,7 @@ const app = express();
 
 
 /* Your code goes here */
-app.delete('/sports/delete', (req, res) => {
+app.delete('/sports/delete', jsonParser, (req, res) => {
     console.log("Deleting a sport");
     let idBody = req.body.id;
     if(!idBody){
@@ -53,7 +55,7 @@ app.listen( PORT, () => {
             useUnifiedTopology: true, 
             useCreateIndex: true
         };
-        mongoose.connect( DATABASE_URL, settings, ( err ) => {
+        mongoose.connect( 'mongodb://localhost/sportsdb', settings, ( err ) => {
             if( err ){
                 return reject( err );
             }

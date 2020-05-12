@@ -1,35 +1,36 @@
 function fetchResults(topic){
-    let url = 'https://www.themealdb.com/api/json/v1/1/search.php';
+    let url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${topic}`;
     let settings = {
-        Method: 'GET',
-        query: {
-            s: topic
-        }
+        method: 'GET',
     };
 
     fetch(url, settings)
-    .then( result => {
-        console.log(result);
-        let body = result.body;
-        console.log(body);
-        let completName = body.strMeal;
-        let mealArea = body.strArea;
-        let instructions = body.strInstructions;
+        .then( response => {
+            if(response.ok){
+                return result.json;
+            }
+        })
+        .then(resJSON => {
+            if(resJSON === null){
+                console.log("Error")
+            }
 
-    })
-    .catch(err => {
-        return err;
-    })
+        })
+        .catch(err => {
+            console.log(err);
+            return err;
+        })
 }
 
 function watchForm(){
     let form = document.querySelector('.js-search-form');
-    let topic = document.querySelector('.js-query');
-    form.addEventListener('submit', (event) =>{
-        //
-        console.log("clicking")
+    
+    form.addEventListener('submit', function(event) {
         event.preventDefault();
-        fetchResults(topic.value);
+        
+        let topic = document.querySelector('.js-query');
+        
+        fetchResults(topic);
     });
 }
 
